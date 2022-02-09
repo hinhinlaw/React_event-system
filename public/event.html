@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="root">
+    <div id="parent">
+      <div id="child">
+        点击
+      </div>
+    </div>
+  </div>
+  <script>
+    let root = document.getElementById('root');
+    let parent = document.getElementById('parent');
+    let child = document.getElementById('child');
+
+    // root的捕获阶段处理函数
+    root.addEventListener('click', event => dispatchEvent(event, true), true);
+    // root的冒泡阶段处理函数
+    root.addEventListener('click', event => dispatchEvent(event, false), false);
+
+    function dispatchEvent(event, isCapture) {
+      let paths = []; // 事件的传播路径数组
+      let currentTarget = event.target; // event.target => 触发事件的那个元素
+      while(currentTarget){
+        paths.push(currentTarget);
+        currentTarget = currentTarget.parentNode;
+      }
+      if(isCapture){ // 如果是捕获阶段
+        for(let i=paths.length - 1; i>=0; i--){
+          let handler = paths[i].onClickCapture;
+          handler && handler();
+        }
+      }else{
+        for(let i=0; i<paths.length; i++){
+          let handler = paths[i].onClick;
+          handler && handler();
+        }
+      }
+    }
+
+    root.addEventListener('click', () => {
+      console.log('root容器元素原生事件捕获');
+    }, true)
+    root.addEventListener('click', () => {
+      console.log('root容器元素原生事件冒泡');
+    }, false)
+    parent.addEventListener('click', () => {
+      console.log('父元素原生事件捕获');
+    }, true)
+    parent.addEventListener('click', () => {
+      console.log('父元素原生事件冒泡');
+    }, false)
+    child.addEventListener('click', () => {
+      console.log('子元素的原生事件捕获');
+    }, true)
+    child.addEventListener('click', () => {
+      console.log('子元素的原生事件冒泡');
+    }, false)
+
+    root.onClick = () => {
+      console.log('root元素React事件冒泡');
+    }
+    root.onClickCapture = () => {
+      console.log('root元素React事件捕获');
+    }
+    parent.onClick = () => {
+      console.log('父元素React事件冒泡');
+    }
+    parent.onClickCapture = () => {
+      console.log('父元素React事件捕获');
+    }
+    child.onClick = () => {
+      console.log('子元素React事件冒泡');
+    }
+    child.onClickCapture = () => {
+      console.log('子元素React事件捕获');
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="parent">
+    <div id="child">
+      点击
+    </div>
+  </div>
+
+  <script>
+    let parentDOM = document.querySelector('#parent');
+    let childDOM = document.querySelector('#child');
+
+    // 父元素冒泡
+    parentDOM.addEventListener('click',function(e){
+      console.log('事件源',e.target)
+      console.log('父元素click 冒泡')
+    },false);
+    // 父元素捕获
+    parentDOM.addEventListener('click',function(e){
+      console.log('父元素click 捕获')
+    },true);
+    // 子元素冒泡
+    childDOM.addEventListener('click',function(e){
+      console.log('子元素click 冒泡')
+    },false);
+    // 子元素捕获
+    childDOM.addEventListener('click',function(e){
+      console.log('子元素click 捕获')
+    },true);
+  </script>
+</body>
+</html>
